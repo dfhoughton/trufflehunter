@@ -98,11 +98,17 @@ pub fn fetch_lines(
                     }
                     let i = estimate_index(&start, i1, &t1, i2, &t2);
                     let (i3, t3) = get_timestamp(&mut larry, i, &rx, true).unwrap();
+                    let mut flipped_once = false;
                     let (i3, t3) = if i3 == i2 {
+                        // we've found two adjacent timestamps that bracket the start time
+                        flipped_once = true;
                         get_timestamp(&mut larry, i, &rx, false).unwrap()
                     } else {
                         (i3, t3)
                     };
+                    if flipped_once && i3 == i1 {
+                        return show_from(larry, i2, end, rx, end_offset);
+                    }
                     if t3 < t1 {
                         return Err(Problem::MisorderedTimestamps(
                             i1,
@@ -191,11 +197,11 @@ fn estimate_index(
         let denominator = t2.timestamp() - t1.timestamp();
         let f = numerator as f64 / denominator as f64;
         let n = (i2 + 1 - i1) as f64;
-        let estimate = (n * f).round() as usize;
+        let estimate = i1 + (n * f).round() as usize;
         // we know it is not either end point
-        if estimate == i1 {
+        if estimate <= i1 {
             i1 + 1
-        } else if estimate == i2 {
+        } else if estimate >= i2 {
             i2 - 1
         } else {
             estimate
