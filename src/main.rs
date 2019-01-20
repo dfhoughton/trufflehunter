@@ -89,6 +89,9 @@ fn main() {
                                             options,
                                         );
                                     }
+                                    if options.is_present("verbose") {
+                                        println!("search for events in the range {} - {}", d1, d2);
+                                    }
                                     match fetch_lines(larry, d1, d2, start_offset, end_offset, rx) {
                                     Err(p) => match p {
                                         Problem::NoTimestamps => eprintln!("no timestamps found"),
@@ -100,12 +103,12 @@ fn main() {
                                         Problem::NormallyUnreachable => unreachable!()
                                     },
                                     Ok((offset, lines)) => {
-                                        if options.is_present("lines") {
-                                            eprintln!(
-                                                "lines {} - {}",
-                                                offset,
-                                                offset + lines.len() - 1
-                                            );
+                                        if options.is_present("verbose") {
+                                            if lines.len() == 0 {
+                                                println!("no events found");
+                                            } else {
+                                                println!("lines {} - {}", offset, offset + lines.len() - 1);
+                                            }
                                         }
                                         for line in lines {
                                             print!("{}", line);
@@ -139,13 +142,13 @@ fn app<'a>() -> App<'a, 'a> {
         (version: crate_version!())
         (author: crate_authors!("\n"))
         (about: crate_description!())
-        (@arg LOG: "the log file to search in")
-        (@arg WHEN: ... "the period of time to search for events in")
-        (@arg format: -f --format [rx] +takes_value "the time stamp format")
-        (@arg long_help: --("long-help") "long help information explaining formats and time expressions")
-        (@arg lines: -l --("line-numbers") "provide line numbers")
-        (@arg start: -s --("start-line") [n] +takes_value "the first line to search from")
-        (@arg end: -e --("end-line") [n] +takes_value "the last line to search to")
+        (@arg LOG: "The log file to search in")
+        (@arg WHEN: ... "The period of time to search for events in")
+        (@arg format: -f --format [rx] +takes_value "The time stamp format")
+        (@arg long_help: --("long-help") "Long help information explaining formats and time expressions")
+        (@arg verbose: --("verbose") "Provide the precise time range and line numbers")
+        (@arg start: -s --("start-line") [n] +takes_value "The first line to search from")
+        (@arg end: -e --("end-line") [n] +takes_value "The last line to search to")
     )
 }
 
@@ -173,7 +176,7 @@ Examples
     2019-01-12 3:10:23 -- and all our yesterdays have lighted fools
     2019-01-12 3:14:59 -- the way to dusty death
 
-    > th --line-numbers log.txt from 3 am today until 3:06
+    > th --verbose log.txt from 3 am today until 3:06
     lines 12345 - 12349
     2019-01-12 3:00:01 -- tomorrow and tomorrow and tomorrow
     sometimes there's garbage between timestamps
