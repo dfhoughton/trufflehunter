@@ -3,7 +3,7 @@ extern crate trufflehunter;
 use std::fs;
 use trufflehunter::{fetch_lines, Problem, DEFAULT_FORMAT};
 extern crate chrono;
-use chrono::{Duration, NaiveDate, NaiveDateTime, Timelike};
+use chrono::{Datelike, Duration, NaiveDate, NaiveDateTime, Timelike};
 extern crate regex;
 use regex::Regex;
 #[macro_use]
@@ -11,6 +11,8 @@ extern crate lazy_static;
 use std::path::Path;
 extern crate larry;
 use larry::Larry;
+extern crate rand;
+use rand::random;
 
 lazy_static! {
     static ref DATE: Regex = Regex::new(DEFAULT_FORMAT).unwrap();
@@ -206,6 +208,60 @@ more garbage
     fs::remove_file(name).expect("could not delete file");
 }
 
+fn big_time_test(name: &str, text: &str, count: usize) {
+    fs::write(name, text).expect("could not write file");
+    let tests = extract_tests(text);
+    assert_eq!(count, tests.len());
+    for i in 0..tests.len() {
+        let (d1, o, mut n) = tests[i];
+        let d1 = d1 - Duration::seconds(1);
+        let end;
+        if let Some((d2, _, n2)) = tests.get(i + 1) {
+            end = d2.with_second(59).unwrap();
+            n += n2;
+        } else {
+            end = d1 + Duration::seconds(2);
+        }
+        let larry = Larry::new(&Path::new(name)).expect("could not make larry");
+        match fetch_lines(larry, d1, end, None, None, DATE.clone()) {
+            Err(e) => assert!(false, format!("error: {:?}", e)),
+            Ok((offset, lines)) => {
+                assert_eq!(o, offset);
+                assert_eq!(n, lines.len());
+            }
+        }
+    }
+    fs::remove_file(name).expect("could not delete file");
+}
+
+#[test]
+fn smoke() {
+    let mut start_time = date("2000-1-3 1:00:00");
+    let mut text = String::new();
+    let mut i : usize = 0;
+    let n = 1000;
+    for _ in 0..n {
+        start_time += Duration::minutes(1 + random::<u8>() as i64);
+        let garbage_count = random::<u8>() % 4;
+        text += &format!(
+            "{} {} {} {}:{}:{} {} {}\n",
+            start_time.year(),
+            start_time.month(),
+            start_time.day(),
+            start_time.hour(),
+            start_time.minute(),
+            start_time.second(),
+            i,
+            garbage_count + 1
+        );
+        for _ in 0..garbage_count {
+            text += "garbage\n";
+        }
+        i += garbage_count as usize + 1;
+    }
+    big_time_test("smoke.log", &text, n);
+}
+
 #[test]
 fn big_time() {
     let name = "big_time.log";
@@ -245,29 +301,7 @@ more garbage
 more garbage
 more garbage
 "#;
-    fs::write(name, text).expect("could not write file");
-    let tests = extract_tests(text);
-    assert_eq!(11, tests.len());
-    for i in 0..tests.len() {
-        let (d1, o, mut n) = tests[i];
-        let d1 = d1 - Duration::seconds(1);
-        let end;
-        if let Some((d2, _, n2)) = tests.get(i + 1) {
-            end = d2.with_second(59).unwrap();
-            n += n2;
-        } else {
-            end = d1 + Duration::seconds(2);
-        }
-        let larry = Larry::new(&Path::new(name)).expect("could not make larry");
-        match fetch_lines(larry, d1, end, None, None, DATE.clone()) {
-            Err(e) => assert!(false, format!("error: {:?}", e)),
-            Ok((offset, lines)) => {
-                assert_eq!(o, offset);
-                assert_eq!(n, lines.len());
-            }
-        }
-    }
-    fs::remove_file(name).expect("could not delete file");
+    big_time_test(name, text, 11);
 }
 
 #[test]
@@ -465,3 +499,4 @@ also not a timestamp
     }
     fs::remove_file(name).expect("could not delete file");
 }
+
