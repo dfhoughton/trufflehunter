@@ -4,6 +4,13 @@ description = "log searching utility"
 version = "0.1.0"
 authors = ["dfhoughton <dfhoughton@gmail.com>"]
 edition = "2018"
+homepage = "https://github.com/dfhoughton/trufflehunter"
+repository = "https://github.com/dfhoughton/trufflehunter"
+documentation = "https://docs.rs/trufflehunter"
+readme = "README.md"
+keywords = [ "log", "search" ]
+categories = [ "command-line-utilities", "filesystem" ]
+license = "GPL-2.0"
 
 [profile.release]
 panic = "abort"
