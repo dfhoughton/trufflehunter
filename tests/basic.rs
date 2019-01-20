@@ -238,7 +238,7 @@ fn big_time_test(name: &str, text: &str, count: usize) {
 fn smoke() {
     let mut start_time = date("2000-1-3 1:00:00");
     let mut text = String::new();
-    let mut i : usize = 0;
+    let mut i: usize = 0;
     let n = 1000;
     for _ in 0..n {
         start_time += Duration::minutes(1 + random::<u8>() as i64);
@@ -499,4 +499,3 @@ also not a timestamp
     }
     fs::remove_file(name).expect("could not delete file");
 }
-
