@@ -111,7 +111,7 @@ fn main() {
                                             }
                                         }
                                         for line in lines {
-                                            print!("{}", line);
+                                            println!("{}", line);
                                         }
                                     }
                                 }
