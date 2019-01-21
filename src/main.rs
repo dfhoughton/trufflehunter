@@ -90,7 +90,7 @@ fn main() {
                                         );
                                     }
                                     if options.is_present("verbose") {
-                                        println!("search for events in the range {} - {}", d1, d2);
+                                        println!("searching for events in the range {} - {}", d1, d2);
                                     }
                                     match fetch_lines(larry, d1, d2, start_offset, end_offset, rx) {
                                     Err(p) => match p {

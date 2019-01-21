@@ -6,20 +6,21 @@ USAGE:
     th [FLAGS] [OPTIONS] [ARGS]
 
 FLAGS:
-    -h, --help            Prints help information
-    -l, --line-numbers    provide line numbers
-        --long-help       long help information explaining formats and time expressions
-    -V, --version         Prints version information
+    -h, --help         Prints help information
+        --long-help    Long help information explaining formats and time expressions
+    -V, --version      Prints version information
+        --verbose      Provide the precise time range and line numbers
 
 OPTIONS:
-    -e, --end-line <n>      the last line to search to
-    -f, --format <rx>       the time stamp format
-    -s, --start-line <n>    the first line to search from
+    -e, --end-line <n>      The last line to search to
+    -f, --format <rx>       The time stamp format
+    -s, --start-line <n>    The first line to search from
 
 ARGS:
-    <LOG>        the log file to search in
-    <WHEN>...    the period of time to search for events in
+    <LOG>        The log file to search in
+    <WHEN>...    The period of time to search for events in
 ```
+
 
 Trufflehunter (th) is a tool for quickly extracting lines from a log file
 within a specified time range. Its required arguments are a log file name and
@@ -37,7 +38,7 @@ Examples
     2019-01-12 3:10:23 -- and all our yesterdays have lighted fools
     2019-01-12 3:14:59 -- the way to dusty death
 
-    > th --line-numbers log.txt from 3 am today until 3:06
+    > th --verbose log.txt from 3 am today until 3:06
     lines 12345 - 12349
     2019-01-12 3:00:01 -- tomorrow and tomorrow and tomorrow
     sometimes there's garbage between timestamps
@@ -59,7 +60,7 @@ enumerate. In general they fit one of these patterns
 The two_timer parser is meant to emulate the semantics of English temporal
 expressions. You can experiment to see what it will accept. When in doubt,
 it doesn't hurt to be be specific. E.g.,
-    
+
     5 minutes before and after 3:13:45 PM on June 5, 1910
 
 Timestamp Formats
