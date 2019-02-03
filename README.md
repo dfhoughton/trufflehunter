@@ -3,7 +3,7 @@ log file searching utility
 
 ```
 USAGE:
-    th [FLAGS] [OPTIONS] [ARGS]
+    hun [FLAGS] [OPTIONS] [ARGS]
 
 FLAGS:
     -h, --help         Prints help information
@@ -22,14 +22,14 @@ ARGS:
 ```
 
 
-Trufflehunter (th) is a tool for quickly extracting lines from a log file
+Trufflehunter (hun) is a tool for quickly extracting lines from a log file
 within a specified time range. Its required arguments are a log file name and
 a time expression.
 
 Examples
 ========
 
-    > th log.txt from 3 am today until 3:15
+    > hun log.txt from 3 am today until 3:15
     2019-01-12 3:00:01 -- tomorrow and tomorrow and tomorrow
     sometimes there's garbage between timestamps
     2019-01-12 3:05:13 -- creeps in this petty pace from day to day
@@ -38,7 +38,7 @@ Examples
     2019-01-12 3:10:23 -- and all our yesterdays have lighted fools
     2019-01-12 3:14:59 -- the way to dusty death
 
-    > th --verbose log.txt from 3 am today until 3:06
+    > hun --verbose log.txt from 3 am today until 3:06
     lines 12345 - 12349
     2019-01-12 3:00:01 -- tomorrow and tomorrow and tomorrow
     sometimes there's garbage between timestamps
