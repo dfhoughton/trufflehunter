@@ -16,7 +16,7 @@ license = "GPL-2.0"
 panic = "abort"
 
 [[bin]]
-name = "th"
+name = "hun"
 path = "src/main.rs"
 
 [dependencies]
