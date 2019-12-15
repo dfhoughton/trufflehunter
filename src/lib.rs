@@ -53,10 +53,10 @@ pub fn fetch_lines(
                 return Err(Problem::MisorderedTimestamps(
                     i1,
                     t1,
-                    larry.get(i1).unwrap(),
+                    larry.get(i1).unwrap().to_owned(),
                     i2,
                     t2,
-                    larry.get(i2).unwrap(),
+                    larry.get(i2).unwrap().to_owned(),
                 ));
             }
             if t1 >= start {
@@ -73,20 +73,20 @@ pub fn fetch_lines(
                                 return Err(Problem::MisorderedTimestamps(
                                     i1,
                                     t1,
-                                    larry.get(i1).unwrap(),
+                                    larry.get(i1).unwrap().to_owned(),
                                     i3,
                                     t3,
-                                    larry.get(i3).unwrap(),
+                                    larry.get(i3).unwrap().to_owned(),
                                 ));
                             }
                             if t3 > t2 {
                                 return Err(Problem::MisorderedTimestamps(
                                     i3,
                                     t3,
-                                    larry.get(i3).unwrap(),
+                                    larry.get(i3).unwrap().to_owned(),
                                     i2,
                                     t2,
-                                    larry.get(i2).unwrap(),
+                                    larry.get(i2).unwrap().to_owned(),
                                 ));
                             }
                             if t3 >= start {
@@ -113,20 +113,20 @@ pub fn fetch_lines(
                         return Err(Problem::MisorderedTimestamps(
                             i1,
                             t1,
-                            larry.get(i1).unwrap(),
+                            larry.get(i1).unwrap().to_owned(),
                             i3,
                             t3,
-                            larry.get(i3).unwrap(),
+                            larry.get(i3).unwrap().to_owned(),
                         ));
                     }
                     if t3 > t2 {
                         return Err(Problem::MisorderedTimestamps(
                             i3,
                             t3,
-                            larry.get(i3).unwrap(),
+                            larry.get(i3).unwrap().to_owned(),
                             i2,
                             t2,
-                            larry.get(i2).unwrap(),
+                            larry.get(i2).unwrap().to_owned(),
                         ));
                     }
                     if t3 == start {
